@@ -143,8 +143,29 @@
     border-color: var(--color-border);
   }
 
+  html,
+  body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
 }
+
+@utility panel-surface {
+  background-color: color-mix(in oklab, black 62%, transparent);
+  border: 1px solid color-mix(in oklab, white 10%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklab, white 8%, transparent),
+    0 8px 24px -12px color-mix(in oklab, black 80%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+}
+
