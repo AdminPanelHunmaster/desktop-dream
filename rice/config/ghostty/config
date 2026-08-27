@@ -1,0 +1,39 @@
+font-family = Agave Nerd Font
+font-size = 14
+font-thicken = true
+
+background = 0d0c0d
+foreground = e8e4e6
+background-opacity = 0.86
+background-blur = true
+
+cursor-color = d2a0b4
+cursor-text = 0d0c0d
+selection-background = 5d3b4a
+selection-foreground = f7f1f3
+
+palette = 0=#191619
+palette = 1=#c16a7d
+palette = 2=#8eaa8b
+palette = 3=#c4a36c
+palette = 4=#8596b8
+palette = 5=#b184a7
+palette = 6=#78a5a7
+palette = 7=#d8d1d4
+palette = 8=#5b5358
+palette = 9=#e1889a
+palette = 10=#a7c0a3
+palette = 11=#ddbd82
+palette = 12=#a2b2d2
+palette = 13=#c99abc
+palette = 14=#93c1c2
+palette = 15=#f4eef0
+
+window-padding-x = 14
+window-padding-y = 12
+window-width = 118
+window-height = 38
+window-decoration = true
+window-theme = ghostty
+confirm-close-surface = false
+

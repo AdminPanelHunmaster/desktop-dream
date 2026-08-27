@@ -1,214 +1,128 @@
 # Desktop Dream
 
-Создай одностраничный сайт, который визуально выглядит как рабочий стол Linux / кастомный Linux rice.
+[![Production](https://img.shields.io/badge/production-desktop--dream.vercel.app-8f6078)](https://desktop-dream.vercel.app)
 
-Референсы
+Desktop Dream is an interactive Linux-desktop documentation site for a real EndeavourOS + KDE Plasma Wayland rice. The wallpaper, top panel and dock remain the main interface; installation, dotfiles, appearance, panels, workspaces, packages, full guide and troubleshooting open as desktop windows.
 
-Я прикрепил 2 изображения:
+![Mauve_girl wallpaper used by the rice](public/assets/wallpapers/main-wallpaper.webp)
 
-Изображение 1 — используй как основной визуальный референс интерфейса: расположение верхней панели, нижнего dock, размеры, отступы и общее ощущение Linux desktop.
+## Audited rice
 
-Изображение 2 — это мои реальные обои. Используй именно это изображение как фон рабочего стола.
+- EndeavourOS / Arch Linux
+- KDE Plasma 6.7.4 and KWin 6.7.4
+- Wayland
+- Ant-Dark Plasma theme, BreezeDark colors and Darkly application style
+- Klassy decorations, Reversal icons and macOS-White cursor
+- FantasqueSansM Nerd Font + Agave Nerd Font
+- Ghostty 1.3.1 and Fastfetch 2.67.1
+- seven virtual desktops with `Alt+1` through `Alt+7`
+- dual-screen floating top panels and bottom docks
 
-НЕ генерируй новые обои и НЕ изменяй изображение 2.
+The live Linux system was used strictly as a read-only source. Repository copies were sanitized before commit.
 
-Главная идея
+## Website
 
-При открытии сайта пользователь должен видеть практически полноценный экран Linux-компьютера.
+Open <https://desktop-dream.vercel.app>.
 
-Сейчас нужен ТОЛЬКО визуальный прототип. Не создавай настоящие приложения, окна, backend, базы данных или сложную логику.
+The dock contains nine real apps:
 
-1. Рабочий стол
+1. Terminal — clone and safe install.
+2. Files — actual `rice/` tree, code viewer, copy, raw download and GitHub links.
+3. Appearance — themes, colors, fonts, icons, cursor, decoration and wallpaper.
+4. Plasma — exact four-panel composition and widget sources.
+5. Workspaces — seven desktops and shortcut locations.
+6. Ghostty & Fastfetch — audited terminal values and preview.
+7. Packages — rice-only official, AUR, optional, fonts and widgets.
+8. Guide — full clean-system installation flow.
+9. Troubleshooting — doctor, common failures, backup and rollback.
 
-На весь экран 100vw × 100vh.
+Windows can be focused, dragged, minimized, closed and reopened. The top panel supports click or `Alt+1…Alt+7` workspace simulation. Displayed CPU/RAM values are explicitly decorative, not visitor telemetry.
 
-Обои — изображение 2.
+## Quick install
 
-background-size: cover.
+```bash
+git clone https://github.com/AdminPanelHunmaster/desktop-dream.git
+cd desktop-dream
+bash rice/scripts/install.sh
+```
 
-background-position: center.
+The safe default installs the repository wallpaper plus Ghostty and Fastfetch only after creating a backup. For the opt-in full route:
 
-Без прокрутки страницы.
+```bash
+bash rice/scripts/install.sh --packages --aur --apply-kde --plasma-layout
+```
 
-Не добавляй поверх обоев большие часы, дату или другие элементы, которых я не просил.
+Read [rice/docs/installation.md](rice/docs/installation.md) before using the full command. The captured Plasma layout targets 1920×1080 + 1366×768.
 
-2. Верхняя панель
+## Manual installation
 
-Сделай тонкую горизонтальную Linux-панель сверху, похожую на изображение 1.
+Use [rice/docs/manual-setup.md](rice/docs/manual-setup.md) to recreate the desktop through KDE System Settings without applying the repository snapshot. [rice/docs/components.md](rice/docs/components.md) explains what each file and component controls.
 
-Она должна быть:
+## Safety and backups
 
-небольшой по высоте;
+- Existing destinations are backed up to `~/.rice-backup/<timestamp>/`.
+- The installer refuses to run as root.
+- Package, AUR, KDE and full panel actions are explicit flags.
+- The installer does not update the system, restart Plasma/KWin, log out or reboot.
+- The full global-shortcuts file is not distributed; only seven workspace keys are merged.
+- Monitor EDIDs/output configuration, activity UUIDs, personal paths and unrelated application settings are excluded.
+- Third-party binary plugins/themes are linked upstream, not copied into this repository.
 
-немного отступать от краёв экрана;
+Create a standalone backup:
 
-с аккуратными слегка скруглёнными углами;
+```bash
+bash rice/scripts/backup.sh --include-plasma-layout
+```
 
-тёмной;
+Run the read-only verifier:
 
-без сильной прозрачности;
+```bash
+bash rice/scripts/doctor.sh
+```
 
-визуально похожей на панель современного Linux rice.
+See [rice/docs/troubleshooting.md](rice/docs/troubleshooting.md) for rollback and common issues.
 
-Пока используй только простые заглушки.
+## Repository structure
 
-Слева:
-1 2 3 4 5 6
-
-Можно стилизовать их как переключатели рабочих столов.
-
-Справа поставь несколько placeholder-элементов, например:
-CPU
-RAM
-NET
-WIFI
-VOL
-BAT
-TIME
-
-Не реализовывай пока настоящий мониторинг системы.
-
-3. Нижний Dock
-
-В нижней части экрана сделай floating dock, как на изображении 1.
-
-Он должен:
-
-находиться по центру;
-
-не касаться нижнего края;
-
-иметь тёмный фон;
-
-слегка скруглённые углы;
-
-выглядеть аккуратно и минималистично;
-
-не быть слишком высоким или большим.
-
-Внутри размести ровно 9 placeholder-иконок:
-
-Icon 1
-
-Icon 2
-
-Icon 3
-
-Icon 4
-
-Icon 5
-
-Icon 6
-
-Icon 7
-
-Icon 8
-
-Icon 9
-
-Сейчас можно использовать простые нейтральные иконки из уже установленной icon library проекта.
-
-Не скачивай дополнительные библиотеки без необходимости.
-
-При наведении достаточно очень лёгкого эффекта:
-
-небольшое увеличение;
-
-плавная анимация примерно 150–200 ms.
-
-Без сложных macOS-анимаций и physics.
-
-Стиль
-
-Ориентируйся именно на Linux rice, а не на Windows или macOS.
-
-Стиль:
-
-dark;
-
-minimal;
-
-clean;
-
-premium Linux desktop;
-
-аккуратные квадратные/слегка скруглённые формы;
-
-без чрезмерного glassmorphism;
-
-без огромных blur;
-
-без ярких градиентов;
-
-интерфейс не должен отвлекать от обоев.
-
-Главным визуальным элементом должны оставаться мои обои.
-
-Адаптивность
-
-Основной приоритет — desktop / laptop.
-
-На разных разрешениях:
-
-фон должен корректно масштабироваться;
-
-top bar не должна выходить за экран;
-
-dock всегда остаётся по центру снизу;
-
-элементы не должны ломаться.
-
-ВАЖНО — экономия Lovable credits
-
-Сделай это максимально просто.
-
-НЕ:
-
-создавай backend;
-
-подключай Supabase;
-
-создавай authentication;
-
-создавай database;
-
-создавай дополнительные страницы;
-
-создавай полноценные приложения;
-
-создавай сложную архитектуру;
-
-добавляй ненужные npm-пакеты;
-
-делай сложные анимации;
-
-делай функции, которые я не просил.
-
-Нужна только одна страница с визуальным интерфейсом Linux desktop.
-
-Сделай сначала именно этот базовый интерфейс. Все приложения, настоящие иконки, окна, меню, системные показатели и остальные функции я добавлю отдельными запросами позже.
-
-Если в существующем проекте уже есть подходящие компоненты или библиотеки — переиспользуй их вместо создания новых.
-
-После реализации не добавляй ничего от себя.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/ac249e19-eb9b-4987-9f89-ce782b5a904e).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+```text
+.
+├── public/assets/wallpapers/ Website wallpaper
+├── rice/
+│ ├── assets/wallpapers/ Installable wallpaper copy
+│ ├── config/ Sanitized Fastfetch, Ghostty, KDE, KWin and Plasma copies
+│ ├── docs/ Installation, components, manual setup, troubleshooting
+│ ├── scripts/ Safe installer, read-only doctor, standalone backup
+│ └── manifest.json Audited machine-readable rice manifest
+└── src/
+├── components/desktop/ Desktop, top panel, dock, windows and apps
+└── data/ Shared website rice content and real file imports
+```
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+The project uses React 19, TanStack Start/Router, Vite, Tailwind CSS and Lucide. No backend, database, authentication or new UI framework is required.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+pnpm install
+pnpm dev
+pnpm lint
+pnpm build
 ```
+
+The repository currently includes `bun.lock`; Bun can also be used with the equivalent scripts.
+
+## Lovable
+
+This project was originally built with [Lovable](https://lovable.dev) and remains connected to the Lovable editor:
+
+<https://lovable.dev/projects/ac249e19-eb9b-4987-9f89-ce782b5a904e>
+
+Changes pushed to the connected `main` branch sync back to Lovable. Do not rewrite published history.
+
+## Deployment
+
+The existing Vercel project is `desktop-dream`. Pushes to `main` deploy through the already connected Git integration:
+
+<https://desktop-dream.vercel.app>
+
+No additional Vercel project is needed.

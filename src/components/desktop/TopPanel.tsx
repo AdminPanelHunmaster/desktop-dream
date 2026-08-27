@@ -1,4 +1,4 @@
-import { Cpu, MemoryStick, Wifi, Network, Volume2, BatteryMedium } from "lucide-react";
+import { BatteryMedium, Cpu, MemoryStick, Network, Volume2, Wifi } from "lucide-react";
 import { useEffect, useState } from "react";
 import { WORKSPACES } from "./constants";
 
@@ -7,59 +7,59 @@ function Clock() {
 
   useEffect(() => {
     setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 1000 * 15);
-    return () => clearInterval(id);
+    const id = window.setInterval(() => setNow(new Date()), 15_000);
+    return () => window.clearInterval(id);
   }, []);
 
   const label = now
-    ? `${String(now.getDate()).padStart(2, "0")}.${String(now.getMonth() + 1).padStart(2, "0")} ${String(
-        now.getHours(),
-      ).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`
+    ? [
+        String(now.getDate()).padStart(2, "0") + "." + String(now.getMonth() + 1).padStart(2, "0"),
+        String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0"),
+      ].join(" ")
     : "--.-- --:--";
 
-  return <span className="tabular-nums text-panel-foreground">{label}</span>;
+  return <time className="panel-clock">{label}</time>;
 }
 
-export function TopPanel() {
-  const [activeWorkspace, setActiveWorkspace] = useState(1);
-
+export function TopPanel({
+  activeWorkspace,
+  onWorkspaceChange,
+}: {
+  activeWorkspace: number;
+  onWorkspaceChange: (workspace: number) => void;
+}) {
   return (
-    <header className="panel-surface absolute left-3 right-3 top-3 z-20 flex h-9 select-none items-center justify-between rounded-lg px-2 text-xs font-medium text-panel-foreground/80">
-      <nav className="flex items-center gap-1">
-        {WORKSPACES.map((num) => {
-          const active = num === activeWorkspace;
-          return (
-            <button
-              key={num}
-              type="button"
-              onClick={() => setActiveWorkspace(num)}
-              aria-label={`Workspace ${num}`}
-              aria-current={active ? "true" : undefined}
-              className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-md outline-none transition-all duration-200 ease-out focus-visible:ring-2 focus-visible:ring-panel-foreground/40 ${
-                active
-                  ? "scale-105 bg-panel-foreground/15 text-panel-foreground"
-                  : "text-panel-foreground/60 hover:bg-panel-foreground/10 hover:text-panel-foreground"
-              }`}
-            >
-              {num}
-            </button>
-          );
-        })}
+    <header className="panel-surface desktop-top-panel">
+      <nav aria-label="Website workspaces">
+        {WORKSPACES.map((workspace) => (
+          <button
+            key={workspace}
+            type="button"
+            onClick={() => onWorkspaceChange(workspace)}
+            aria-label={"Workspace " + workspace}
+            aria-current={workspace === activeWorkspace ? "page" : undefined}
+            className={workspace === activeWorkspace ? "is-active" : undefined}
+          >
+            {workspace}
+          </button>
+        ))}
       </nav>
-
-      <div className="flex items-center gap-3 pr-1 text-panel-foreground/70">
-        <span className="hidden items-center gap-1.5 sm:flex">
-          <Cpu className="h-3.5 w-3.5" /> 12%
+      <div className="panel-status" title="Decorative rice preview metrics — not visitor hardware">
+        <span className="metric-wide">
+          <Cpu aria-hidden="true" />
+          demo 12%
         </span>
-        <span className="hidden items-center gap-1.5 sm:flex">
-          <MemoryStick className="h-3.5 w-3.5" /> 48%
+        <span className="metric-wide">
+          <MemoryStick aria-hidden="true" />
+          demo 48%
         </span>
-        <span className="hidden items-center gap-1.5 md:flex">
-          <Network className="h-3.5 w-3.5" /> 1.2M
+        <span className="metric-desktop">
+          <Network aria-hidden="true" />
+          1.2M
         </span>
-        <Wifi className="hidden h-3.5 w-3.5 sm:block" aria-label="Wi-Fi" />
-        <Volume2 className="hidden h-3.5 w-3.5 sm:block" aria-label="Volume" />
-        <BatteryMedium className="hidden h-3.5 w-3.5 sm:block" aria-label="Battery" />
+        <Wifi aria-label="Wi-Fi preview" />
+        <Volume2 aria-label="Volume preview" />
+        <BatteryMedium aria-label="Battery preview" />
         <Clock />
       </div>
     </header>

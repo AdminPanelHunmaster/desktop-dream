@@ -1,0 +1,210 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    // Built-in EndeavourOS mark, recolored to match the Mauve rice.
+    "source": "EndeavourOS",
+    "type": "builtin",
+    "padding": { "top": 1, "right": 3 },
+    "color": {
+      "1": "38;2;203;139;166", // dusty rose
+      "2": "38;2;173;116;157", // muted mauve
+      "3": "38;2;132;102;151", // soft violet shadow
+    },
+  },
+  "modules": [
+    "break",
+    {
+      "type": "custom",
+      "key": " ",
+      "format": "        \u001b[1m\u001b[3m\u001b[31m And the Meek shall inherit the Earth...\u001b[0m",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;5;255m┌──────────────────────Hardware──────────────────────────────────────┐",
+    },
+    {
+      "type": "title",
+      "key": "│ PC",
+      "keyColor": "white",
+      "format": "{user-name}",
+    },
+    {
+      "type": "host",
+      "key": "│ ├ ",
+      "hostname": true,
+      "keyColor": "white",
+    },
+    {
+      "type": "display",
+      "key": "│ ├󰍹 ",
+      "format": "{width}x{height} @ {refresh-rate}Hz",
+      "keyColor": "white",
+    },
+    {
+      "type": "cpu",
+      "key": "│ ├ ",
+      "showPeCoreCount": true,
+      "keyColor": "white",
+    },
+    {
+      "type": "gpu",
+      "key": "│ ├󰢮 ",
+      "keyColor": "white",
+    },
+    {
+      "type": "memory",
+      "key": "│ ├ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "swap",
+      "key": "│ ├ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "disk",
+      "key": "│ ├ ",
+      "showRemovable": true,
+      "keyColor": "white",
+      "format": "{1} / {2} ({3}) - {9}",
+    },
+    {
+      "type": "disk",
+      "key": "│ └ ",
+      "folders": "/",
+      "format": "{create-time:10} [{days} days]",
+      "keyColor": "white",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;5;255m└────────────────────────────────────────────────────────────────────┘",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;5;255m┌──────────────────────Software──────────────────────────────────────┐",
+    },
+    {
+      "type": "os",
+      "key": "│ OS",
+      "keyColor": "white",
+    },
+    {
+      "type": "kernel",
+      "key": "│ ├ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "packages",
+      "key": "│ ├󰏖 ",
+      "keyColor": "white",
+    },
+    {
+      "type": "terminal",
+      "key": "│ ├ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "shell",
+      "key": "│ └ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "de",
+      "key": "│ DE",
+      "keyColor": "white",
+    },
+    {
+      "type": "lm",
+      "key": "│ ├ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "wm",
+      "key": "│ ├ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "wmtheme",
+      "key": "│ ├󰉼 ",
+      "keyColor": "white",
+    },
+    {
+      "type": "cursor",
+      "key": "│ ├󰆿 ",
+      "keyColor": "white",
+    },
+    {
+      "type": "font",
+      "key": "│ ├ ",
+      "keyColor": "white",
+      "format": "{font1}",
+    },
+    {
+      "type": "terminalfont",
+      "key": "│ └ ",
+      "keyColor": "white",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;5;255m└────────────────────────────────────────────────────────────────────┘",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;5;255m┌────────────────────Miscellaneous───────────────────────────────────┐",
+    },
+    {
+      "type": "media",
+      "key": "│  Music",
+      "format": "({status}) {title:52}",
+      "keyColor": "white",
+    },
+    {
+      "type": "player",
+      "key": "│  Player",
+      "keyColor": "white",
+      "format": "{player}",
+    },
+    {
+      "type": "datetime",
+      "key": "│  Date and Time",
+      "keyColor": "white",
+      "format": "{1}/{11}/{3} - {14}:{18} {22}",
+    },
+    {
+      "type": "localip",
+      "key": "│  IP",
+      "showIpv4": true,
+      "keyColor": "white",
+    },
+    {
+      "type": "bios",
+      "key": "│  Bios",
+      "keyColor": "white",
+      "format": "{4} - {1}",
+    },
+    {
+      "type": "uptime",
+      "key": "│  Uptime",
+      "keyColor": "white",
+    },
+    {
+      "type": "weather",
+      "timeout": 2000,
+      "outputFormat": "%c%t+-+%C+(%l)",
+      "format": "lua:local args=...;return (args.result:gsub('%s%s+', ' '))",
+      "key": "│  Weather",
+      "keyColor": "white",
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;5;255m└────────────────────────────────────────────────────────────────────┘",
+    },
+    {
+      "type": "custom",
+      "key": " ",
+      "format": "        \u001b[1m\u001b[3m\u001b[31m Our great computers fill the hallowed halls --2112\u001b[0m",
+    },
+    { "type": "colors", "paddingLeft": 20, "symbol": "star" },
+    "break",
+  ],
+}

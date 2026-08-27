@@ -1,49 +1,134 @@
-import { X } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { Minus, X } from "lucide-react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from "react";
+
+export type WindowSize = "medium" | "large" | "wide";
 
 export function Window({
   title,
   onClose,
+  onMinimize,
+  onFocus,
+  active,
+  zIndex,
+  size = "large",
+  initialOffset = { x: 0, y: 0 },
   children,
 }: {
   title: string;
   onClose: () => void;
+  onMinimize: () => void;
+  onFocus: () => void;
+  active: boolean;
+  zIndex: number;
+  size?: WindowSize;
+  initialOffset?: { x: number; y: number };
   children?: ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [position, setPosition] = useState(initialOffset);
+  const drag = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+    originX: number;
+    originY: number;
+  } | null>(null);
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => setOpen(true));
+    const id = requestAnimationFrame(() => setVisible(true));
     return () => cancelAnimationFrame(id);
   }, []);
 
+  const beginDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0) return;
+    onFocus();
+    drag.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      originX: position.x,
+      originY: position.y,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const moveDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    if (!state || state.pointerId !== event.pointerId) return;
+    const maxX = Math.max(0, window.innerWidth / 2 - 96);
+    const maxY = Math.max(0, window.innerHeight / 2 - 82);
+    setPosition({
+      x: Math.min(maxX, Math.max(-maxX, state.originX + event.clientX - state.x)),
+      y: Math.min(maxY, Math.max(-maxY, state.originY + event.clientY - state.y)),
+    });
+  };
+
+  const endDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (drag.current?.pointerId === event.pointerId) drag.current = null;
+  };
+
   const close = () => {
-    setOpen(false);
-    setTimeout(onClose, 200);
+    setVisible(false);
+    window.setTimeout(onClose, 180);
+  };
+
+  const minimize = () => {
+    setVisible(false);
+    window.setTimeout(onMinimize, 160);
   };
 
   return (
-    <div
+    <section
       role="dialog"
       aria-label={title}
-      className={`panel-surface absolute left-1/2 top-1/2 z-10 w-[min(520px,80vw)] -translate-x-1/2 -translate-y-1/2 select-none overflow-hidden rounded-xl transition-all duration-200 ease-out ${
-        open ? "translate-y-[-50%] scale-100 opacity-100" : "translate-y-[-44%] scale-[0.96] opacity-0"
-      }`}
+      aria-modal="false"
+      onPointerDown={onFocus}
+      className={[
+        "desktop-window",
+        "window-" + size,
+        active ? "is-active" : "",
+        visible ? "is-visible" : "",
+      ].join(" ")}
+      style={{
+        zIndex,
+        left: "calc(50% + " + position.x + "px)",
+        top: "calc(50% + " + position.y + "px)",
+      }}
     >
-      <div className="flex h-9 items-center justify-between border-b border-white/10 px-3 text-xs font-medium text-panel-foreground/80">
+      <div
+        className="window-titlebar"
+        onPointerDown={beginDrag}
+        onPointerMove={moveDrag}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+      >
         <span>{title}</span>
-        <button
-          type="button"
-          aria-label="Close window"
-          onClick={close}
-          className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-md outline-none transition-colors duration-150 hover:bg-white/10 hover:text-panel-foreground focus-visible:ring-2 focus-visible:ring-panel-foreground/40"
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
+        <div className="window-controls">
+          <button
+            type="button"
+            aria-label={"Minimize " + title}
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={minimize}
+          >
+            <Minus aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            aria-label={"Close " + title}
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={close}
+          >
+            <X aria-hidden="true" />
+          </button>
+        </div>
       </div>
-      <div className="flex h-52 items-center justify-center text-sm text-panel-foreground/60">
-        {children ?? "Application placeholder"}
-      </div>
-    </div>
+      <div className="window-content">{children}</div>
+    </section>
   );
 }
