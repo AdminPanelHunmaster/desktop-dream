@@ -193,11 +193,13 @@ export function WorkspacesApp() {
 export function FastfetchApp() {
   const { locale } = useLocale();
   const copy = content[locale];
+  const plasmaThemeLabel = copy.appearance.factNames[0] ?? "Theme";
+  const iconsLabel = copy.appearance.factNames[4] ?? "Icons";
   const preview = [
     ...terminalPreview.slice(0, 6),
     `  ${copy.fastfetch.windowTheme.padEnd(12)}Klassy`,
-    `  ${copy.appearance.factNames[0].padEnd(12)}Ant-Dark`,
-    `  ${copy.appearance.factNames[4].padEnd(12)}Reversal`,
+    `  ${plasmaThemeLabel.padEnd(12)}Ant-Dark`,
+    `  ${iconsLabel.padEnd(12)}Reversal`,
     `  ${copy.fastfetch.font.padEnd(12)}Agave Nerd Font`,
   ];
   return (

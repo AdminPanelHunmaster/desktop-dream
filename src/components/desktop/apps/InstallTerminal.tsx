@@ -326,10 +326,11 @@ export function InstallTerminal() {
       setActiveProcess({ id, kind });
     } else if (command === "fortune") {
       const choices = fortunes[locale];
+      const fortune = choices[Math.floor(Math.random() * choices.length)] ?? choices[0];
       append({
         command: rawCommand,
         kind: "text",
-        text: choices[Math.floor(Math.random() * choices.length)],
+        text: fortune,
       });
     } else {
       append({ command: rawCommand, kind: "text", text: terminalCopy[locale].unknown(rawCommand) });

@@ -238,8 +238,8 @@ const packageNames = [
   "ClearClock 0.3",
 ] as const;
 
-function purposes(values: string[]) {
-  return Object.fromEntries(packageNames.map((name, index) => [name, values[index]]));
+function purposes(values: string[]): Record<string, string> {
+  return Object.fromEntries(packageNames.map((name, index) => [name, values[index] ?? name]));
 }
 
 export const content: Record<Locale, LocalizedContent> = {
