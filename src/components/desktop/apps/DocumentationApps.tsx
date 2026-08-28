@@ -10,16 +10,17 @@ import {
 } from "lucide-react";
 import {
   appearanceFacts,
-  guideSteps,
+  guideCommands,
   packages,
   panels,
   repository,
   terminalPreview,
   thirdParty,
-  troubleshooting,
   widgets,
   workspaces,
 } from "@/data/rice";
+import { content } from "@/data/localization";
+import { useLocale } from "@/i18n/use-locale";
 import { rawFileUrl } from "@/data/rice-files";
 import { CopyButton } from "./CopyButton";
 
@@ -51,32 +52,33 @@ function Command({ children }: { children: string }) {
 }
 
 export function AppearanceApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   return (
     <div className="doc-app app-scroll">
-      <AppIntro eyebrow="Appearance stack" title="Dark, square, restrained">
-        The values below were read from the live system. Third-party projects stay upstream; the
-        repository stores only owner configuration and an included wallpaper.
+      <AppIntro eyebrow={copy.appearance.eyebrow} title={copy.appearance.title}>
+        {copy.appearance.intro}
       </AppIntro>
       <section className="appearance-list">
-        {appearanceFacts.map(([name, value, purpose]) => (
-          <article key={name}>
-            <span>{name}</span>
+        {appearanceFacts.map(([, value], index) => (
+          <article key={value}>
+            <span>{copy.appearance.factNames[index]}</span>
             <strong>{value}</strong>
-            <p>{purpose}</p>
+            <p>{copy.appearance.factPurposes[index]}</p>
           </article>
         ))}
       </section>
       <section className="app-section">
         <div className="section-heading">
-          <span>Sources</span>
-          <h3>Third-party components</h3>
+          <span>{copy.common.sources}</span>
+          <h3>{copy.appearance.thirdParty}</h3>
         </div>
         <div className="source-list">
-          {thirdParty.map((item) => (
+          {thirdParty.map((item, index) => (
             <a key={item.name} href={item.source} target="_blank" rel="noreferrer">
               <div>
                 <strong>{item.name}</strong>
-                <span>{item.kind}</span>
+                <span>{copy.appearance.kinds[index]}</span>
               </div>
               <ExternalLink aria-hidden="true" />
             </a>
@@ -84,13 +86,13 @@ export function AppearanceApp() {
         </div>
       </section>
       <section className="wallpaper-card">
-        <img src="/assets/wallpapers/main-wallpaper.webp" alt="Mauve_girl rice wallpaper" />
+        <img src="/assets/wallpapers/main-wallpaper.webp" alt={copy.appearance.wallpaperAlt} />
         <div>
-          <span>Included asset</span>
+          <span>{copy.appearance.included}</span>
           <strong>Mauve_girl.webp</strong>
           <a href={rawFileUrl("rice/assets/wallpapers/Mauve_girl.webp")} download>
             <Download aria-hidden="true" />
-            Download
+            {copy.common.download}
           </a>
         </div>
       </section>
@@ -99,26 +101,27 @@ export function AppearanceApp() {
 }
 
 export function PlasmaApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   return (
     <div className="doc-app app-scroll">
-      <AppIntro eyebrow="Plasma shell" title="Four floating panels, two screens">
-        The audited layout uses a 1920×1080 primary display and 1366×768 secondary display. Panel
-        geometry is reproducible, but another monitor topology should be adjusted manually.
+      <AppIntro eyebrow={copy.plasma.eyebrow} title={copy.plasma.title}>
+        {copy.plasma.intro}
       </AppIntro>
       <div className="panel-stack">
-        {panels.map((panel) => (
+        {panels.map((panel, panelIndex) => (
           <article key={panel.title}>
             <header>
               <MonitorCog aria-hidden="true" />
               <div>
-                <strong>{panel.title}</strong>
+                <strong>{copy.plasma.panelTitles[panelIndex]}</strong>
                 <span>{panel.geometry}</span>
               </div>
             </header>
             <div className="widget-flow">
               {panel.widgets.map((widget, index) => (
                 <span key={widget}>
-                  {widget}
+                  {copy.plasma.widgetNames[widget] ?? widget}
                   {index < panel.widgets.length - 1 && <ArrowRight aria-hidden="true" />}
                 </span>
               ))}
@@ -128,15 +131,15 @@ export function PlasmaApp() {
       </div>
       <section className="app-section">
         <div className="section-heading">
-          <span>Widgets</span>
-          <h3>Exact upstream sources</h3>
+          <span>{copy.plasma.widgets}</span>
+          <h3>{copy.plasma.upstream}</h3>
         </div>
         <div className="source-list">
-          {widgets.map((widget) => (
+          {widgets.map((widget, index) => (
             <a key={widget.name} href={widget.source} target="_blank" rel="noreferrer">
               <div>
                 <strong>{widget.name}</strong>
-                <span>{widget.purpose}</span>
+                <span>{copy.plasma.widgetPurposes[index]}</span>
               </div>
               <ExternalLink aria-hidden="true" />
             </a>
@@ -145,20 +148,19 @@ export function PlasmaApp() {
       </section>
       <div className="safety-note">
         <AlertTriangle aria-hidden="true" />
-        <p>
-          <code>--plasma-layout</code> is opt-in, backed up first, and never restarts plasmashell.
-        </p>
+        <p>{copy.plasma.safety}</p>
       </div>
     </div>
   );
 }
 
 export function WorkspacesApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   return (
     <div className="doc-app app-scroll">
-      <AppIntro eyebrow="KWin desktops" title="Seven desktops, one row">
-        Each shortcut is copied from the live <code>kglobalshortcutsrc</code>. The installer merges
-        these keys instead of publishing or replacing every global shortcut.
+      <AppIntro eyebrow={copy.workspaces.eyebrow} title={copy.workspaces.title}>
+        {copy.workspaces.intro}
       </AppIntro>
       <div className="workspace-map">
         {workspaces.map((workspace) => (
@@ -166,7 +168,7 @@ export function WorkspacesApp() {
             <kbd>{workspace.shortcut}</kbd>
             <ArrowRight aria-hidden="true" />
             <div>
-              <span>Desktop</span>
+              <span>{copy.workspaces.desktop}</span>
               <strong>{workspace.desktop}</strong>
             </div>
           </article>
@@ -174,8 +176,8 @@ export function WorkspacesApp() {
       </div>
       <section className="app-section">
         <div className="section-heading">
-          <span>Config</span>
-          <h3>Where it lives</h3>
+          <span>{copy.workspaces.config}</span>
+          <h3>{copy.workspaces.location}</h3>
         </div>
         <div className="path-list">
           <code>~/.config/kwinrc → [Desktops] Number=7, Rows=1</code>
@@ -183,58 +185,60 @@ export function WorkspacesApp() {
           <code>rice/config/kde/kglobalshortcutsrc.snippet → sanitized merge source</code>
         </div>
       </section>
-      <p className="app-copy">
-        Try <kbd>Alt</kbd> + <kbd>1</kbd>…<kbd>7</kbd> now: the website changes its own active
-        workspace without reading or changing your operating system.
-      </p>
+      <p className="app-copy">{copy.workspaces.siteHint}</p>
     </div>
   );
 }
 
 export function FastfetchApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
+  const preview = [
+    ...terminalPreview.slice(0, 6),
+    `  ${copy.fastfetch.windowTheme.padEnd(12)}Klassy`,
+    `  ${copy.appearance.factNames[0].padEnd(12)}Ant-Dark`,
+    `  ${copy.appearance.factNames[4].padEnd(12)}Reversal`,
+    `  ${copy.fastfetch.font.padEnd(12)}Agave Nerd Font`,
+  ];
   return (
     <div className="fastfetch-app app-scroll">
       <div className="fastfetch-preview">
-        <pre>{terminalPreview.join("\n")}</pre>
+        <pre>{preview.join("\n")}</pre>
       </div>
       <section className="app-section">
         <div className="section-heading">
           <span>Ghostty</span>
-          <h3>Terminal surface</h3>
+          <h3>{copy.fastfetch.terminalSurface}</h3>
         </div>
         <div className="fact-grid">
           <div className="fact-row">
-            <span>Font</span>
+            <span>{copy.fastfetch.font}</span>
             <strong>Agave Nerd Font 14</strong>
           </div>
           <div className="fact-row">
-            <span>Background</span>
+            <span>{copy.fastfetch.background}</span>
             <strong>#0d0c0d · 86%</strong>
           </div>
           <div className="fact-row">
-            <span>Blur</span>
-            <strong>Enabled</strong>
+            <span>{copy.fastfetch.blur}</span>
+            <strong>{copy.fastfetch.enabled}</strong>
           </div>
           <div className="fact-row">
-            <span>Padding</span>
+            <span>{copy.fastfetch.padding}</span>
             <strong>14 × 12</strong>
           </div>
           <div className="fact-row">
-            <span>Palette</span>
-            <strong>Mauve / rose / slate</strong>
+            <span>{copy.fastfetch.palette}</span>
+            <strong>{copy.fastfetch.paletteValue}</strong>
           </div>
         </div>
       </section>
       <section className="app-section">
         <div className="section-heading">
           <span>Fastfetch</span>
-          <h3>Audited configuration</h3>
+          <h3>{copy.fastfetch.audited}</h3>
         </div>
-        <p className="app-copy">
-          Uses the built-in EndeavourOS mark recolored in dusty rose, muted mauve and violet. The
-          module layout covers hardware, software, media, date, uptime and weather. Device-specific
-          results are generated at runtime and were never committed.
-        </p>
+        <p className="app-copy">{copy.fastfetch.description}</p>
         <Command>fastfetch --config ~/.config/fastfetch/config.jsonc</Command>
         <div className="action-row">
           <a
@@ -243,11 +247,11 @@ export function FastfetchApp() {
             download
           >
             <Download aria-hidden="true" />
-            Fastfetch config
+            {copy.fastfetch.config}
           </a>
           <a className="app-button" href={rawFileUrl("rice/config/ghostty/config")} download>
             <Download aria-hidden="true" />
-            Ghostty config
+            {copy.fastfetch.ghosttyConfig}
           </a>
         </div>
       </section>
@@ -256,21 +260,22 @@ export function FastfetchApp() {
 }
 
 export function PackagesApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   return (
     <div className="doc-app app-scroll">
-      <AppIntro eyebrow="Rice packages only" title="Small, explicit dependency set">
-        This is not a dump of every installed package. It contains only software that materially
-        contributes to the observed desktop.
+      <AppIntro eyebrow={copy.packages.eyebrow} title={copy.packages.title}>
+        {copy.packages.intro}
       </AppIntro>
       {Object.entries(packages).map(([group, entries]) => (
         <section className="package-group" key={group}>
-          <h3>{group}</h3>
+          <h3>{copy.packages.groups[group] ?? group}</h3>
           <div>
             {entries.map((entry) => (
               <article key={entry.name}>
                 <div>
                   <strong>{entry.name}</strong>
-                  <p>{entry.purpose}</p>
+                  <p>{copy.packages.purposes[entry.name] ?? entry.purpose}</p>
                 </div>
                 <code>{entry.command}</code>
                 <div className="package-actions">
@@ -279,7 +284,7 @@ export function PackagesApp() {
                     href={entry.source}
                     target="_blank"
                     rel="noreferrer"
-                    aria-label={entry.name + " source"}
+                    aria-label={entry.name + " " + copy.packages.sourceLabel}
                   >
                     <ExternalLink aria-hidden="true" />
                   </a>
@@ -294,20 +299,21 @@ export function PackagesApp() {
 }
 
 export function GuideApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   return (
     <div className="doc-app app-scroll">
-      <AppIntro eyebrow="From clean KDE to this rice" title="Full installation path">
-        Each stage says what changes, why it exists and whether it is safe to automate. The source
-        system is not modified by this documentation site.
+      <AppIntro eyebrow={copy.guide.eyebrow} title={copy.guide.title}>
+        {copy.guide.intro}
       </AppIntro>
       <ol className="guide-steps">
-        {guideSteps.map((step, index) => (
+        {copy.guide.steps.map((step, index) => (
           <li key={step.title}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <div>
               <h3>{step.title}</h3>
               <p>{step.body}</p>
-              {step.command && <Command>{step.command}</Command>}
+              {guideCommands[index] && <Command>{guideCommands[index]}</Command>}
             </div>
           </li>
         ))}
@@ -320,11 +326,11 @@ export function GuideApp() {
           rel="noreferrer"
         >
           <ExternalLink aria-hidden="true" />
-          Read installation.md
+          {copy.common.readInstallation}
         </a>
         <a className="app-button" href={repository.zip}>
           <Download aria-hidden="true" />
-          Download all
+          {copy.common.downloadAll}
         </a>
       </div>
     </div>
@@ -332,34 +338,33 @@ export function GuideApp() {
 }
 
 export function TroubleshootingApp() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   return (
     <div className="doc-app app-scroll">
-      <AppIntro eyebrow="Settings & recovery" title="Diagnose before resetting">
-        The doctor is read-only. Backups preserve relative paths, so one broken component can be
-        restored without wiping the rest of Plasma.
+      <AppIntro eyebrow={copy.troubleshooting.eyebrow} title={copy.troubleshooting.title}>
+        {copy.troubleshooting.intro}
       </AppIntro>
       <section className="doctor-card">
         <div>
           <ShieldCheck aria-hidden="true" />
           <div>
-            <strong>Run the rice doctor</strong>
-            <p>
-              Checks OS, Plasma, Wayland, packages, themes, files, effects and all seven shortcuts.
-            </p>
+            <strong>{copy.troubleshooting.doctor}</strong>
+            <p>{copy.troubleshooting.doctorBody}</p>
           </div>
         </div>
         <Command>bash rice/scripts/doctor.sh</Command>
         <div className="doctor-legend">
           <span>
-            <CheckCircle2 /> Installed / configured
+            <CheckCircle2 /> {copy.troubleshooting.configured}
           </span>
           <span>
-            <AlertTriangle /> Optional component missing
+            <AlertTriangle /> {copy.troubleshooting.optional}
           </span>
         </div>
       </section>
       <div className="trouble-list">
-        {troubleshooting.map(([title, body]) => (
+        {copy.troubleshooting.items.map(([title, body]) => (
           <details key={title}>
             <summary>
               <span>{title}</span>
@@ -372,11 +377,8 @@ export function TroubleshootingApp() {
       <section className="rollback-card">
         <RotateCcw aria-hidden="true" />
         <div>
-          <strong>Rollback</strong>
-          <p>
-            Log out before restoring Plasma/KWin files. Inspect the timestamped directory and copy
-            only the affected relative path back.
-          </p>
+          <strong>{copy.troubleshooting.rollback}</strong>
+          <p>{copy.troubleshooting.rollbackBody}</p>
           <code>~/.rice-backup/YYYYMMDD-HHMMSS/</code>
         </div>
       </section>

@@ -119,6 +119,27 @@ export const workspaces = Array.from({ length: 7 }, (_, index) => ({
   shortcut: "Alt + " + (index + 1),
 }));
 
+export const guideCommands = [
+  'printf "session=%s desktop=%s\\n" "$XDG_SESSION_TYPE" "$XDG_CURRENT_DESKTOP"',
+  null,
+  "git clone https://github.com/AdminPanelHunmaster/desktop-dream.git\ncd desktop-dream",
+  "sed -n '1,240p' rice/manifest.json\nsed -n '1,320p' rice/scripts/install.sh",
+  "bash rice/scripts/doctor.sh",
+  "bash rice/scripts/backup.sh --include-plasma-layout",
+  "bash rice/scripts/install.sh --packages",
+  "bash rice/scripts/install.sh --aur",
+  null,
+  "bash rice/scripts/install.sh",
+  "bash rice/scripts/install.sh --apply-kde",
+  "bash rice/scripts/install.sh --plasma-layout",
+  null,
+  'fc-match "Agave Nerd Font"\nfastfetch --config ~/.config/fastfetch/config.jsonc',
+  null,
+  "bash rice/scripts/doctor.sh\nfastfetch",
+  null,
+  'BACKUP="$HOME/.rice-backup/YYYYMMDD-HHMMSS"\nfind "$BACKUP" -maxdepth 4 -type f -print',
+] as const;
+
 export type RicePackage = {
   name: string;
   purpose: string;
@@ -230,91 +251,6 @@ export const packages: Record<
   })),
 };
 
-export const guideSteps = [
-  {
-    title: "Confirm the target",
-    body: "Use EndeavourOS or Arch Linux with KDE Plasma and select the Plasma (Wayland) session. The captured setup is Plasma/KWin 6.7.4; binary KWin effects must match your installed ABI.",
-    command: 'printf "session=%s desktop=%s\\\\n" "$XDG_SESSION_TYPE" "$XDG_CURRENT_DESKTOP"',
-  },
-  {
-    title: "Clone the real repository",
-    body: "The website, documentation and sanitized dotfiles live together. No separate download service or hidden backend is involved.",
-    command:
-      "git clone https://github.com/AdminPanelHunmaster/desktop-dream.git\\ncd desktop-dream",
-  },
-  {
-    title: "Read and back up",
-    body: "Inspect the installer before running it. The standalone backup preserves relative paths below ~/.rice-backup/<timestamp>/.",
-    command:
-      "sed -n '1,260p' rice/scripts/install.sh\\nbash rice/scripts/backup.sh --include-plasma-layout",
-  },
-  {
-    title: "Install repository packages",
-    body: "The package flag shows the exact pacman list and uses --needed. The script never performs a system-wide update.",
-    command: "bash rice/scripts/install.sh --packages",
-  },
-  {
-    title: "Install reviewed AUR components",
-    body: "An existing paru or yay is required. Review the PKGBUILDs for Klassy, Reversal, Apple Cursor and KDE Rounded Corners.",
-    command: "bash rice/scripts/install.sh --aur",
-  },
-  {
-    title: "Install third-party Plasma content",
-    body: "Install Ant-Dark, Kara, KVitals and ClearClock from the upstream links. They are intentionally not vendored or downloaded. ClearClock's exact user-local fonts are documented but not redistributed.",
-  },
-  {
-    title: "Apply app configs",
-    body: "The safe default installs the wallpaper plus Ghostty and Fastfetch after backing up any existing destination.",
-    command: "bash rice/scripts/install.sh",
-  },
-  {
-    title: "Apply KDE and KWin",
-    body: "The opt-in flag installs sanitized KDE/KWin copies and merges only Alt+1…Alt+7. It does not restart Plasma.",
-    command: "bash rice/scripts/install.sh --apply-kde",
-  },
-  {
-    title: "Choose the panel route",
-    body: "The exact layout snapshot targets 1920×1080 + 1366×768. Use --plasma-layout only for a close topology; otherwise recreate panels manually from the Plasma app.",
-    command: "bash rice/scripts/install.sh --plasma-layout",
-  },
-  {
-    title: "Log in and verify",
-    body: "Log out, select Plasma (Wayland), log back in and run the read-only doctor. Check fonts, theme entries, shortcuts, panels and restrained blur.",
-    command: "bash rice/scripts/doctor.sh\\nfastfetch",
-  },
-] as const;
-
-export const troubleshooting = [
-  [
-    "Missing glyphs",
-    'Install both Nerd Font packages, restart Ghostty and check fc-match "Agave Nerd Font".',
-  ],
-  [
-    "Theme is not listed",
-    "Qt/KWin binary plugins must match the current Plasma ABI. Reinstall or rebuild the upstream component after a major Plasma upgrade.",
-  ],
-  [
-    "Alt shortcuts do nothing",
-    "Open System Settings → Keyboard → Shortcuts → KWin, remove conflicts and assign direct desktop switching.",
-  ],
-  [
-    "Panel is on the wrong screen",
-    "Restore the two Plasma files from backup and rebuild panels manually. The captured layout uses screen indexes 0/1.",
-  ],
-  [
-    "Blur artifacts",
-    "Disable Rounded Corners, then Blur, to isolate the incompatible effect. Keep blur strength near the captured value of 8.",
-  ],
-  [
-    "Wallpaper is blank",
-    "Select ~/.local/share/wallpapers/desktop-dream/Mauve_girl.webp manually; Plasma may retain an older absolute path.",
-  ],
-  [
-    "Need to roll back",
-    "Log out before panel/KWin restoration and copy only the affected path from ~/.rice-backup/<timestamp>/.",
-  ],
-] as const;
-
 export const terminalPreview = [
   "          /\\\\",
   "         /  \\\\       Desktop Dream",
@@ -322,8 +258,4 @@ export const terminalPreview = [
   "       / ____ \\\\     KWin · Wayland",
   "      /_/    \\\\_\\\\    Ghostty · Fastfetch",
   "",
-  "  WM Theme    Klassy",
-  "  Plasma      Ant-Dark",
-  "  Icons       Reversal",
-  "  Font        Agave Nerd Font",
 ] as const;

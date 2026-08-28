@@ -1,4 +1,4 @@
-import { ExternalLink, Languages, ShieldCheck } from "lucide-react";
+import { ExternalLink, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { repository } from "@/data/rice";
 import {
@@ -8,9 +8,11 @@ import {
   fastfetchHardware,
   fastfetchSoftware,
   fortunes,
+  terminalA11y,
   terminalCopy,
   type TerminalLocale,
 } from "@/data/terminal";
+import { useLocale } from "@/i18n/use-locale";
 
 type EntryKind = "welcome" | "text" | "help" | "fastfetch" | "train" | "cava" | "matrix" | "github";
 
@@ -47,7 +49,7 @@ function Welcome({ locale }: { locale: TerminalLocale }) {
 
 function Help({ locale }: { locale: TerminalLocale }) {
   return (
-    <div className="terminal-help" aria-label="Available demo commands">
+    <div className="terminal-help" aria-label={terminalA11y[locale].help}>
       {commandGroups.map((group) => (
         <section key={group.title}>
           <strong>{group.title}</strong>
@@ -87,20 +89,21 @@ function FastfetchFrame({
 
 function DemoFastfetch({ locale }: { locale: TerminalLocale }) {
   const copy = terminalCopy[locale];
+  const labels = terminalA11y[locale];
   return (
-    <section className="fastfetch-demo" aria-label="Static Desktop Dream Fastfetch demonstration">
+    <section className="fastfetch-demo" aria-label={labels.fastfetch}>
       <header>
         <span>{copy.demoBadge}</span>
         <small>{copy.fastfetchNote}</small>
       </header>
       <div className="fastfetch-layout">
-        <pre className="fastfetch-ascii" aria-label="EndeavourOS ASCII logo">
+        <pre className="fastfetch-ascii" aria-label={labels.ascii}>
           {endeavourAscii.join("\n")}
         </pre>
         <div className="fastfetch-information">
           <p className="fastfetch-quote">And the Meek shall inherit the Earth...</p>
-          <FastfetchFrame title="Hardware" items={fastfetchHardware} />
-          <FastfetchFrame title="Software" items={fastfetchSoftware} />
+          <FastfetchFrame title={labels.hardware} items={fastfetchHardware} />
+          <FastfetchFrame title={labels.software} items={fastfetchSoftware} />
         </div>
       </div>
     </section>
@@ -116,7 +119,7 @@ function prefersReducedMotion() {
 function Train({ locale }: { locale: TerminalLocale }) {
   const [finished, setFinished] = useState(false);
   return (
-    <div className="train-demo" aria-label="ASCII steam locomotive demo">
+    <div className="train-demo" aria-label={terminalA11y[locale].train}>
       {!finished ? (
         <pre className="train-sprite" onAnimationEnd={() => setFinished(true)}>
           {`      ====        ________                ___________
@@ -154,7 +157,7 @@ function Cava({ running, locale }: { running: boolean; locale: TerminalLocale })
   return (
     <div className="terminal-process" aria-live="off">
       <pre>{terminalCopy[locale].cava}</pre>
-      <div className="cava-bars" aria-label="Decorative demo visualizer">
+      <div className="cava-bars" aria-label={terminalA11y[locale].visualizer}>
         {bars.map((bar, index) => (
           <span key={index}>{bar}</span>
         ))}
@@ -184,7 +187,7 @@ function Matrix({ running, locale }: { running: boolean; locale: TerminalLocale 
   return (
     <div className="terminal-process" aria-live="off">
       <pre>{terminalCopy[locale].matrix}</pre>
-      <pre className="matrix-demo" aria-label="Decorative Matrix animation">
+      <pre className="matrix-demo" aria-label={terminalA11y[locale].matrix}>
         {Array.from({ length: 7 }, (_, row) => createMatrixLine(42, tick + row * 5)).join("\n")}
       </pre>
     </div>
@@ -229,8 +232,8 @@ function Entry({
   );
 }
 
-export function InstallTerminal({ onOpenGuide }: { onOpenGuide: () => void }) {
-  const [locale, setLocale] = useState<TerminalLocale>("en");
+export function InstallTerminal() {
+  const { locale, localeTag } = useLocale();
   const [entries, setEntries] = useState<TerminalEntry[]>([
     { id: 0, kind: "welcome", locale: "en" },
   ]);
@@ -242,10 +245,6 @@ export function InstallTerminal({ onOpenGuide }: { onOpenGuide: () => void }) {
   const draft = useRef("");
   const inputRef = useRef<HTMLInputElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (navigator.language.toLowerCase().startsWith("ru")) setLocale("ru");
-  }, []);
 
   useEffect(() => {
     const screen = screenRef.current;
@@ -287,7 +286,7 @@ export function InstallTerminal({ onOpenGuide }: { onOpenGuide: () => void }) {
       append({
         command: rawCommand,
         kind: "text",
-        text: new Intl.DateTimeFormat(locale === "ru" ? "ru-RU" : "en-GB", {
+        text: new Intl.DateTimeFormat(localeTag, {
           dateStyle: "full",
         }).format(new Date()),
       });
@@ -295,7 +294,7 @@ export function InstallTerminal({ onOpenGuide }: { onOpenGuide: () => void }) {
       append({
         command: rawCommand,
         kind: "text",
-        text: new Intl.DateTimeFormat(locale === "ru" ? "ru-RU" : "en-GB", {
+        text: new Intl.DateTimeFormat(localeTag, {
           timeStyle: "medium",
         }).format(new Date()),
       });
@@ -316,7 +315,7 @@ export function InstallTerminal({ onOpenGuide }: { onOpenGuide: () => void }) {
       append({ command: rawCommand, kind: "text", text: terminalCopy[locale].rice });
     } else if (command === "guide") {
       append({ command: rawCommand, kind: "text", text: terminalCopy[locale].guide });
-      onOpenGuide();
+      window.dispatchEvent(new CustomEvent("desktop-dream:open-app", { detail: "guide" }));
     } else if (command === "github") {
       append({ command: rawCommand, kind: "github", text: terminalCopy[locale].github });
       window.open(repository.url, "_blank", "noopener,noreferrer");
@@ -369,23 +368,7 @@ export function InstallTerminal({ onOpenGuide }: { onOpenGuide: () => void }) {
           <ShieldCheck aria-hidden="true" />
           <span>{copy.demoBadge}</span>
         </div>
-        <div className="terminal-locale" aria-label={copy.language}>
-          <Languages aria-hidden="true" />
-          {(["en", "ru"] as const).map((language) => (
-            <button
-              type="button"
-              key={language}
-              className={language === locale ? "is-active" : undefined}
-              aria-pressed={language === locale}
-              onClick={(event) => {
-                event.stopPropagation();
-                setLocale(language);
-              }}
-            >
-              {language.toUpperCase()}
-            </button>
-          ))}
-        </div>
+        <span className="terminal-toolbar-language">{copy.language}</span>
       </header>
       <div ref={screenRef} className="terminal-screen app-scroll" role="log" aria-live="polite">
         {entries.map((entry) => (

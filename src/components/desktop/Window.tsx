@@ -6,6 +6,8 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
+import { content } from "@/data/localization";
+import { useLocale } from "@/i18n/use-locale";
 
 export type WindowSize = "medium" | "large" | "wide";
 
@@ -30,6 +32,8 @@ export function Window({
   initialOffset?: { x: number; y: number };
   children?: ReactNode;
 }) {
+  const { locale } = useLocale();
+  const copy = content[locale].desktop;
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState(initialOffset);
   const drag = useRef<{
@@ -112,7 +116,7 @@ export function Window({
         <div className="window-controls">
           <button
             type="button"
-            aria-label={"Minimize " + title}
+            aria-label={copy.minimize + " " + title}
             onPointerDown={(event) => event.stopPropagation()}
             onClick={minimize}
           >
@@ -120,7 +124,7 @@ export function Window({
           </button>
           <button
             type="button"
-            aria-label={"Close " + title}
+            aria-label={copy.close + " " + title}
             onPointerDown={(event) => event.stopPropagation()}
             onClick={close}
           >

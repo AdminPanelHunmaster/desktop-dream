@@ -452,6 +452,13 @@
     cursor: grabbing;
   }
 
+  .window-titlebar > span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .window-controls {
     display: flex;
     gap: 0.2rem;
@@ -1175,11 +1182,10 @@
     font-size: 0.7rem;
   }
   .package-group p {
-    overflow: hidden;
     color: rgb(255 255 255 / 0.36);
     font-size: 0.61rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
   }
   .package-group article > code {
     overflow: hidden;
@@ -1396,6 +1402,13 @@
     width: 0.8rem;
     height: 0.8rem;
     color: #d090ad;
+  }
+
+  .terminal-toolbar-language {
+    overflow: hidden;
+    color: rgb(255 255 255 / 0.36);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .terminal-locale button {

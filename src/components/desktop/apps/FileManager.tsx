@@ -10,6 +10,8 @@ import {
 import { useMemo, useState } from "react";
 import { githubFileUrl, rawFileUrl, riceFiles, type RiceFile } from "@/data/rice-files";
 import { CopyButton } from "./CopyButton";
+import { content } from "@/data/localization";
+import { useLocale } from "@/i18n/use-locale";
 
 const folderFor = (path: string) => {
   const parts = path.split("/");
@@ -28,6 +30,8 @@ function FileIcon({ file }: { file: RiceFile }) {
 }
 
 export function FileManager() {
+  const { locale } = useLocale();
+  const copy = content[locale];
   const [selectedPath, setSelectedPath] = useState("rice/config/fastfetch/config.jsonc");
   const selected = riceFiles.find((file) => file.path === selectedPath) ?? riceFiles[0]!;
   const folders = useMemo(() => {
@@ -41,7 +45,7 @@ export function FileManager() {
 
   return (
     <div className="file-manager">
-      <aside className="file-sidebar" aria-label="Rice file tree">
+      <aside className="file-sidebar" aria-label={copy.files.tree}>
         <div className="file-location">
           <Folder aria-hidden="true" />
           <span>desktop-dream</span>
@@ -83,8 +87,8 @@ export function FileManager() {
               className="app-button"
               href={rawFileUrl(selected.path)}
               download
-              title="Download raw file"
-              aria-label="Download raw file"
+              title={copy.files.downloadRaw}
+              aria-label={copy.files.downloadRaw}
             >
               <Download aria-hidden="true" />
             </a>
@@ -93,8 +97,8 @@ export function FileManager() {
               href={githubFileUrl(selected.path)}
               target="_blank"
               rel="noreferrer"
-              title="Open on GitHub"
-              aria-label="Open on GitHub"
+              title={copy.common.openGithub}
+              aria-label={copy.common.openGithub}
             >
               <ExternalLink aria-hidden="true" />
             </a>
@@ -103,11 +107,11 @@ export function FileManager() {
         <div className="code-meta">
           <span>{selected.language}</span>
           <span>{selected.sizeLabel}</span>
-          <span>sanitized repository copy</span>
+          <span>{copy.files.repositoryCopy}</span>
         </div>
         {selected.language === "image" ? (
           <div className="wallpaper-view">
-            <img src="/assets/wallpapers/main-wallpaper.webp" alt="Mauve rice wallpaper" />
+            <img src="/assets/wallpapers/main-wallpaper.webp" alt={copy.files.wallpaperAlt} />
           </div>
         ) : (
           <pre className="app-scroll">

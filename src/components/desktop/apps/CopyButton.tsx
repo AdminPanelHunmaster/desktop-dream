@@ -1,15 +1,19 @@
 import { Check, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
+import { content } from "@/data/localization";
+import { useLocale } from "@/i18n/use-locale";
 
 export function CopyButton({
   value,
-  label = "Copy",
+  label,
   compact = false,
 }: {
   value: string;
   label?: string;
   compact?: boolean;
 }) {
+  const { locale } = useLocale();
+  const copyText = content[locale].common;
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
 
   useEffect(() => {
@@ -27,7 +31,12 @@ export function CopyButton({
     }
   };
 
-  const labelText = status === "copied" ? "Copied" : status === "failed" ? "Copy failed" : label;
+  const labelText =
+    status === "copied"
+      ? copyText.copied
+      : status === "failed"
+        ? copyText.copyFailed
+        : (label ?? copyText.copy);
 
   return (
     <button

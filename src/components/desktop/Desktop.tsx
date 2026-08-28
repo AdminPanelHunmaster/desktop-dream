@@ -10,11 +10,14 @@ import {
   Terminal,
   type LucideIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
+import { content, type AppId } from "@/data/localization";
+import { locales } from "@/i18n/locale";
+import { useLocale } from "@/i18n/use-locale";
 import { Dock, type DockItem } from "./Dock";
 import { TopPanel } from "./TopPanel";
 import { Window, type WindowSize } from "./Window";
-import { WALLPAPER_URL, WORKSPACES } from "./constants";
+import { WALLPAPER_URL } from "./constants";
 import { InstallTerminal } from "./apps/InstallTerminal";
 import { FileManager } from "./apps/FileManager";
 import {
@@ -27,110 +30,76 @@ import {
   WorkspacesApp,
 } from "./apps/DocumentationApps";
 
-type AppId =
-  | "install"
-  | "files"
-  | "appearance"
-  | "plasma"
-  | "workspaces"
-  | "fastfetch"
-  | "packages"
-  | "guide"
-  | "troubleshooting";
-
 type AppDefinition = {
   id: AppId;
-  title: string;
-  label: string;
   icon: LucideIcon;
   size: WindowSize;
-  content: ReactNode;
+  component: ComponentType;
 };
 
 type OpenWindow = { id: AppId; zIndex: number; minimized: boolean };
 
-const requestGuideWindow = () => {
-  window.dispatchEvent(new CustomEvent<AppId>("desktop-dream:open-app", { detail: "guide" }));
-};
-
 const apps: AppDefinition[] = [
   {
     id: "install",
-    title: "Terminal — Install",
-    label: "Install",
     icon: Terminal,
     size: "large",
-    content: <InstallTerminal onOpenGuide={requestGuideWindow} />,
+    component: InstallTerminal,
   },
   {
     id: "files",
-    title: "Files — Dotfiles",
-    label: "Dotfiles",
     icon: Folder,
     size: "wide",
-    content: <FileManager />,
+    component: FileManager,
   },
   {
     id: "appearance",
-    title: "Appearance",
-    label: "Appearance",
     icon: Palette,
     size: "large",
-    content: <AppearanceApp />,
+    component: AppearanceApp,
   },
   {
     id: "plasma",
-    title: "Plasma — Panels & Widgets",
-    label: "Plasma",
     icon: PanelsTopLeft,
     size: "large",
-    content: <PlasmaApp />,
+    component: PlasmaApp,
   },
   {
     id: "workspaces",
-    title: "Workspaces",
-    label: "Workspaces",
     icon: Grid3X3,
     size: "medium",
-    content: <WorkspacesApp />,
+    component: WorkspacesApp,
   },
   {
     id: "fastfetch",
-    title: "Ghostty & Fastfetch",
-    label: "Fastfetch",
     icon: Gauge,
     size: "large",
-    content: <FastfetchApp />,
+    component: FastfetchApp,
   },
   {
     id: "packages",
-    title: "Packages",
-    label: "Packages",
     icon: Package,
     size: "large",
-    content: <PackagesApp />,
+    component: PackagesApp,
   },
   {
     id: "guide",
-    title: "Guide — Installation",
-    label: "Guide",
     icon: BookOpen,
     size: "large",
-    content: <GuideApp />,
+    component: GuideApp,
   },
   {
     id: "troubleshooting",
-    title: "Settings & Troubleshooting",
-    label: "Troubleshooting",
     icon: Settings,
     size: "large",
-    content: <TroubleshootingApp />,
+    component: TroubleshootingApp,
   },
 ];
 
 export function Desktop() {
+  const { locale, setLocale } = useLocale();
+  const copy = content[locale];
   const [windows, setWindows] = useState<OpenWindow[]>([]);
-  const [activeWorkspace, setActiveWorkspace] = useState(1);
   const nextZ = useRef(30);
 
   const focusWindow = (id: AppId) => {
@@ -167,14 +136,14 @@ export function Desktop() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (!event.altKey || event.ctrlKey || event.metaKey) return;
-      const workspace = Number(event.key);
-      if (!WORKSPACES.includes(workspace)) return;
+      const language = locales.find((entry) => entry.number === Number(event.key));
+      if (!language) return;
       event.preventDefault();
-      setActiveWorkspace(workspace);
+      setLocale(language.id);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [setLocale]);
 
   const topWindow = windows
     .filter((window) => !window.minimized)
@@ -187,7 +156,7 @@ export function Desktop() {
     const state = windows.find((window) => window.id === app.id);
     return {
       id: app.id,
-      label: app.label,
+      label: copy.apps[app.id].label,
       icon: app.icon,
       onOpen: () => openWindow(app.id),
       active: Boolean(state && !state.minimized),
@@ -199,21 +168,22 @@ export function Desktop() {
     <main
       className="desktop-root"
       style={{ backgroundImage: 'url("' + WALLPAPER_URL + '")' }}
-      aria-label="Interactive KDE rice documentation desktop"
+      aria-label={copy.desktop.aria}
     >
-      <TopPanel activeWorkspace={activeWorkspace} onWorkspaceChange={setActiveWorkspace} />
+      <TopPanel />
       <div className="workspace-toast" aria-live="polite">
-        workspace {activeWorkspace}
+        {locales.find((entry) => entry.id === locale)?.name}
       </div>
 
       {windows.map((windowState, index) => {
         if (windowState.minimized) return null;
         const app = apps.find((candidate) => candidate.id === windowState.id);
         if (!app) return null;
+        const AppComponent = app.component;
         return (
           <Window
             key={app.id}
-            title={app.title}
+            title={copy.apps[app.id].title}
             size={app.size}
             zIndex={windowState.zIndex}
             active={topWindow?.id === app.id}
@@ -226,7 +196,7 @@ export function Desktop() {
             }
             onClose={() => setWindows((current) => current.filter((item) => item.id !== app.id))}
           >
-            {app.content}
+            <AppComponent />
           </Window>
         );
       })}

@@ -1,8 +1,11 @@
 import { BatteryMedium, Cpu, MemoryStick, Network, Volume2, Wifi } from "lucide-react";
 import { useEffect, useState } from "react";
-import { WORKSPACES } from "./constants";
+import { content } from "@/data/localization";
+import { locales } from "@/i18n/locale";
+import { useLocale } from "@/i18n/use-locale";
 
 function Clock() {
+  const { localeTag } = useLocale();
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -12,39 +15,40 @@ function Clock() {
   }, []);
 
   const label = now
-    ? [
-        String(now.getDate()).padStart(2, "0") + "." + String(now.getMonth() + 1).padStart(2, "0"),
-        String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0"),
-      ].join(" ")
+    ? new Intl.DateTimeFormat(localeTag, {
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(now)
     : "--.-- --:--";
 
   return <time className="panel-clock">{label}</time>;
 }
 
-export function TopPanel({
-  activeWorkspace,
-  onWorkspaceChange,
-}: {
-  activeWorkspace: number;
-  onWorkspaceChange: (workspace: number) => void;
-}) {
+export function TopPanel() {
+  const { locale, setLocale } = useLocale();
+  const copy = content[locale].desktop;
   return (
     <header className="panel-surface desktop-top-panel">
-      <nav aria-label="Website workspaces">
-        {WORKSPACES.map((workspace) => (
+      <nav aria-label={copy.languages}>
+        {locales.map((language) => (
           <button
-            key={workspace}
+            key={language.id}
             type="button"
-            onClick={() => onWorkspaceChange(workspace)}
-            aria-label={"Workspace " + workspace}
-            aria-current={workspace === activeWorkspace ? "page" : undefined}
-            className={workspace === activeWorkspace ? "is-active" : undefined}
+            onClick={() => setLocale(language.id)}
+            aria-label={copy.languageHint
+              .replace("{number}", String(language.number))
+              .replace("{name}", language.name)}
+            aria-pressed={language.id === locale}
+            title={language.name}
+            className={language.id === locale ? "is-active" : undefined}
           >
-            {workspace}
+            {language.number}
           </button>
         ))}
       </nav>
-      <div className="panel-status" title="Decorative rice preview metrics — not visitor hardware">
+      <div className="panel-status" title={copy.decorativeMetrics}>
         <span className="metric-wide">
           <Cpu aria-hidden="true" />
           demo 12%
@@ -57,9 +61,9 @@ export function TopPanel({
           <Network aria-hidden="true" />
           1.2M
         </span>
-        <Wifi aria-label="Wi-Fi preview" />
-        <Volume2 aria-label="Volume preview" />
-        <BatteryMedium aria-label="Battery preview" />
+        <Wifi aria-label={copy.wifi} />
+        <Volume2 aria-label={copy.volume} />
+        <BatteryMedium aria-label={copy.battery} />
         <Clock />
       </div>
     </header>

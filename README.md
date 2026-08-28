@@ -26,7 +26,7 @@ Open <https://desktop-dream.vercel.app>.
 
 The dock contains nine real apps:
 
-1. Terminal — safe frontend command simulation with EN/RU help, history, animated fun commands and a screenshot-matched demo Fastfetch; it never executes commands or reads visitor hardware.
+1. Terminal — safe frontend command simulation with seven localized help systems, history, animated fun commands and a screenshot-matched demo Fastfetch; it never executes commands or reads visitor hardware.
 2. Files — actual `rice/` tree, code viewer, copy, raw download and GitHub links.
 3. Appearance — themes, colors, fonts, icons, cursor, decoration and wallpaper.
 4. Plasma — exact four-panel composition and widget sources.
@@ -36,7 +36,7 @@ The dock contains nine real apps:
 8. Guide — full clean-system installation flow.
 9. Troubleshooting — doctor, common failures, backup and rollback.
 
-Windows can be focused, dragged, minimized, closed and reopened. The top panel supports click or `Alt+1…Alt+7` workspace simulation. Displayed CPU/RAM values are explicitly decorative, not visitor telemetry.
+Windows can be focused, dragged, minimized, closed and reopened. Top-panel buttons `1…7` and `Alt+1…Alt+7` select English, Russian, Ukrainian, German, Polish, Czech and Hungarian. The Workspaces app separately documents the real rice shortcuts. Displayed CPU/RAM values are explicitly decorative, not visitor telemetry.
 
 ## Quick install
 
