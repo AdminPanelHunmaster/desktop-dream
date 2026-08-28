@@ -1361,6 +1361,357 @@
     color: #d5a5bb;
     font-size: 0.65rem;
   }
+
+  .interactive-terminal {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    background: #09090b;
+    color: #e7e2e5;
+  }
+
+  .terminal-toolbar {
+    display: flex;
+    min-height: 2.3rem;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(255 255 255 / 0.07);
+    padding: 0 0.75rem;
+    background: rgb(255 255 255 / 0.018);
+    color: rgb(255 255 255 / 0.48);
+    font-size: 0.62rem;
+    letter-spacing: 0.07em;
+  }
+
+  .terminal-toolbar > div,
+  .terminal-locale {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .terminal-toolbar svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    color: #d090ad;
+  }
+
+  .terminal-locale button {
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    padding: 0.2rem 0.32rem;
+    color: rgb(255 255 255 / 0.42);
+    font-size: 0.58rem;
+    outline: none;
+  }
+
+  .terminal-locale button:hover,
+  .terminal-locale button:focus-visible,
+  .terminal-locale button.is-active {
+    border-color: rgb(208 144 173 / 0.28);
+    background: rgb(208 144 173 / 0.12);
+    color: #eccddd;
+  }
+
+  .terminal-screen {
+    min-height: 0;
+    flex: 1;
+    overflow: auto;
+    padding: 1rem 1.1rem 1.5rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .terminal-entry + .terminal-entry {
+    margin-top: 0.8rem;
+  }
+
+  .terminal-welcome {
+    border-left: 2px solid #b97b9a;
+    padding: 0.15rem 0 0.15rem 0.8rem;
+  }
+
+  .terminal-welcome strong {
+    display: block;
+    margin-bottom: 0.55rem;
+    color: #f2e8ed;
+    font-size: 0.82rem;
+  }
+
+  .terminal-welcome p {
+    color: rgb(255 255 255 / 0.58);
+  }
+
+  .terminal-welcome .terminal-welcome-hint {
+    margin-top: 0.55rem;
+    color: #d5a0b8;
+  }
+
+  .terminal-history-command,
+  .terminal-input-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.28rem;
+  }
+
+  .terminal-history-command {
+    margin-bottom: 0.35rem;
+    color: rgb(255 255 255 / 0.78);
+    white-space: pre-wrap;
+  }
+
+  .terminal-user {
+    color: #dfabc3;
+  }
+
+  .terminal-path {
+    color: #b794cc;
+  }
+
+  .terminal-separator {
+    color: rgb(255 255 255 / 0.35);
+  }
+
+  .terminal-text-output,
+  .terminal-process > pre {
+    color: rgb(255 255 255 / 0.7);
+    font: inherit;
+    white-space: pre-wrap;
+  }
+
+  .terminal-input-row {
+    margin-top: 0.85rem;
+  }
+
+  .terminal-input-row label {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 0.28rem;
+  }
+
+  .terminal-input-row input {
+    min-width: 8rem;
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: #f4edf1;
+    font: inherit;
+    caret-color: #e8a9c6;
+    outline: none;
+  }
+
+  .terminal-input-row input::placeholder {
+    color: rgb(255 255 255 / 0.22);
+  }
+
+  .terminal-help {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+    max-width: 46rem;
+  }
+
+  .terminal-help section {
+    display: grid;
+    align-content: start;
+    gap: 0.25rem;
+  }
+
+  .terminal-help section > strong {
+    margin-bottom: 0.2rem;
+    color: #d78dac;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+  }
+
+  .terminal-help section > div {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 0.5rem;
+  }
+
+  .terminal-help code {
+    color: #eee5ea;
+  }
+
+  .terminal-help span {
+    color: rgb(255 255 255 / 0.42);
+  }
+
+  .terminal-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #d9a4bd;
+    text-decoration: underline;
+    text-decoration-color: rgb(217 164 189 / 0.3);
+    text-underline-offset: 0.2rem;
+  }
+
+  .terminal-link svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .fastfetch-demo {
+    margin-top: 0.45rem;
+    border: 1px solid rgb(255 255 255 / 0.06);
+    padding: 0.65rem;
+    background: #08080a;
+  }
+
+  .fastfetch-demo > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgb(255 255 255 / 0.06);
+    padding-bottom: 0.45rem;
+  }
+
+  .fastfetch-demo > header span {
+    color: #e096b7;
+    font-size: 0.61rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .fastfetch-demo > header small {
+    color: rgb(255 255 255 / 0.34);
+    font-size: 0.57rem;
+  }
+
+  .fastfetch-layout {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.72fr) minmax(27rem, 1.28fr);
+    gap: 0.8rem;
+    align-items: start;
+  }
+
+  .fastfetch-ascii {
+    overflow: hidden;
+    padding-top: 0.35rem;
+    background: linear-gradient(160deg, #e7a2c2 4%, #c27aa3 48%, #8f71bb 92%);
+    background-clip: text;
+    color: transparent;
+    font:
+      600 0.68rem/1.08 "Agave Nerd Font",
+      ui-monospace,
+      monospace;
+    white-space: pre;
+  }
+
+  .fastfetch-information {
+    display: grid;
+    min-width: 0;
+    gap: 0.65rem;
+  }
+
+  .fastfetch-quote {
+    margin-bottom: -0.15rem;
+    color: #db87ac;
+    text-align: center;
+  }
+
+  .fastfetch-frame {
+    min-width: 0;
+    border: 1px solid rgb(255 255 255 / 0.84);
+    padding: 0.35rem 0.45rem 0.45rem;
+  }
+
+  .fastfetch-frame legend {
+    margin: 0 auto;
+    padding: 0 0.6rem;
+    color: #f2edf0;
+    text-align: center;
+  }
+
+  .fastfetch-frame > div {
+    display: grid;
+    gap: 0.05rem;
+  }
+
+  .fastfetch-frame p {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: 1.15rem 1fr;
+    gap: 0.15rem;
+    color: #ece7ea;
+    line-height: 1.28;
+  }
+
+  .fastfetch-frame p > span:first-child {
+    color: #d7cfd3;
+    text-align: center;
+  }
+
+  .fastfetch-frame p > span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .train-demo {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .train-sprite {
+    width: max-content;
+    color: #dfb1c6;
+    font:
+      0.6rem/1.05 ui-monospace,
+      monospace;
+    animation: terminal-train 3.4s linear forwards;
+  }
+
+  @keyframes terminal-train {
+    from {
+      transform: translateX(75%);
+    }
+    to {
+      transform: translateX(-105%);
+    }
+  }
+
+  .terminal-process {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .cava-bars {
+    display: flex;
+    max-width: 34rem;
+    min-height: 4.5rem;
+    align-items: end;
+    justify-content: space-between;
+    overflow: hidden;
+    color: #dc88ae;
+    font-size: 2.3rem;
+    line-height: 1;
+  }
+
+  .cava-bars span:nth-child(3n) {
+    color: #a985ca;
+  }
+
+  .matrix-demo {
+    max-width: 34rem;
+    overflow: hidden;
+    color: #86b991;
+    font:
+      0.72rem/1.3 ui-monospace,
+      monospace;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 0.45rem rgb(91 190 112 / 0.28);
+  }
+
+  .terminal-muted {
+    color: rgb(255 255 255 / 0.38);
+  }
 }
 
 @media (max-width: 800px) {
@@ -1495,6 +1846,88 @@
   }
   .package-group article > code {
     max-width: calc(100vw - 5.5rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .fastfetch-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .fastfetch-ascii {
+    max-width: 100%;
+    justify-self: center;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .terminal-app.interactive-terminal {
+    padding: 0;
+  }
+
+  .terminal-toolbar {
+    min-height: 2.05rem;
+    padding: 0 0.5rem;
+  }
+
+  .terminal-toolbar > div:first-child span {
+    display: none;
+  }
+
+  .terminal-screen {
+    padding: 0.75rem 0.7rem 1rem;
+    font-size: 0.68rem;
+  }
+
+  .terminal-help {
+    grid-template-columns: 1fr;
+  }
+
+  .terminal-help section > div {
+    grid-template-columns: 6.6rem 1fr;
+  }
+
+  .terminal-input-row {
+    flex-wrap: wrap;
+  }
+
+  .terminal-input-row input {
+    min-width: 100%;
+    padding-left: 0.1rem;
+  }
+
+  .fastfetch-demo {
+    padding: 0.4rem;
+  }
+
+  .fastfetch-demo > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .fastfetch-ascii {
+    font-size: 0.52rem;
+  }
+
+  .fastfetch-frame {
+    padding-right: 0.3rem;
+    padding-left: 0.3rem;
+  }
+
+  .fastfetch-frame p {
+    grid-template-columns: 0.9rem 1fr;
+    font-size: 0.64rem;
+  }
+
+  .cava-bars {
+    min-height: 3.5rem;
+    font-size: 1.45rem;
+  }
+
+  .train-sprite {
+    font-size: 0.48rem;
   }
 }
 

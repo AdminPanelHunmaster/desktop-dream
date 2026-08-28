@@ -26,7 +26,7 @@ Open <https://desktop-dream.vercel.app>.
 
 The dock contains nine real apps:
 
-1. Terminal — clone and safe install.
+1. Terminal — safe frontend command simulation with EN/RU help, history, animated fun commands and a screenshot-matched demo Fastfetch; it never executes commands or reads visitor hardware.
 2. Files — actual `rice/` tree, code viewer, copy, raw download and GitHub links.
 3. Appearance — themes, colors, fonts, icons, cursor, decoration and wallpaper.
 4. Plasma — exact four-panel composition and widget sources.

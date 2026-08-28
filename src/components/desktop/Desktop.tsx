@@ -10,7 +10,7 @@ import {
   Terminal,
   type LucideIcon,
 } from "lucide-react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Dock, type DockItem } from "./Dock";
 import { TopPanel } from "./TopPanel";
 import { Window, type WindowSize } from "./Window";
@@ -49,6 +49,10 @@ type AppDefinition = {
 
 type OpenWindow = { id: AppId; zIndex: number; minimized: boolean };
 
+const requestGuideWindow = () => {
+  window.dispatchEvent(new CustomEvent<AppId>("desktop-dream:open-app", { detail: "guide" }));
+};
+
 const apps: AppDefinition[] = [
   {
     id: "install",
@@ -56,7 +60,7 @@ const apps: AppDefinition[] = [
     label: "Install",
     icon: Terminal,
     size: "large",
-    content: <InstallTerminal />,
+    content: <InstallTerminal onOpenGuide={requestGuideWindow} />,
   },
   {
     id: "files",
@@ -137,7 +141,7 @@ export function Desktop() {
     );
   };
 
-  const openWindow = (id: AppId) => {
+  const openWindow = useCallback((id: AppId) => {
     nextZ.current += 1;
     const zIndex = nextZ.current;
     setWindows((current) => {
@@ -149,7 +153,16 @@ export function Desktop() {
       }
       return [...current, { id, minimized: false, zIndex }];
     });
-  };
+  }, []);
+
+  useEffect(() => {
+    const onOpenApp = (event: Event) => {
+      const id = (event as CustomEvent<AppId>).detail;
+      if (apps.some((app) => app.id === id)) openWindow(id);
+    };
+    window.addEventListener("desktop-dream:open-app", onOpenApp);
+    return () => window.removeEventListener("desktop-dream:open-app", onOpenApp);
+  }, [openWindow]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
